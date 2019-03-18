@@ -1,0 +1,152 @@
+---
+- hosts: all
+  remote_user: vagrant
+  become: yes
+  tasks:
+  - debug:
+      msg: "{{ hostvars[inventory_hostname].ansible_distribution }} {{ hostvars[inventory_hostname].ansible_distribution_version }}"
+
+  - name: Ensure EPEL is Enabled 
+    yum: 
+      name: epel-release 
+      state: present 
+
+# Upgrade all packages
+  - name: Upgrade all packages
+    yum:
+      name: '*'
+      state: latest
+
+# Check if a reboot is required
+  - name: check if reboot is required
+    shell: needs-restarting -r
+    failed_when: false
+    register: reboot_required
+    changed_when: false
+
+# Reboot and wait for server to return
+  - name: Reboot the server and wait for it to come back up.
+    reboot:
+    when: reboot_required.rc != 0
+
+# Install common packages
+  - name: Install git
+    yum:
+      name: git
+      state: present
+
+  - name: Install java. Java 1.8 required for Jenkins client.
+    yum:
+      name: java-1.8.0-openjdk
+      state: present
+
+  - name: Install ntpdate client
+    yum:
+      name: ntp
+      state: present
+
+  - name: Install ntpdate
+    yum:
+      name: ntpdate
+      state: present
+
+  - name: Install patch
+    yum:
+      name: patch
+      state: present
+
+  - name: Install vim
+    yum:
+      name: vim
+      state: present
+
+  - name: Install zsh
+    yum:
+      name: zsh
+      state: present
+
+# Install EPEL Programs
+  - name: Install p7zip
+    yum:
+      name: p7zip
+      state: present
+
+  - name: Install dos2unix
+    yum:
+      name: dos2unix
+      state: present
+
+  - name: Install bzip2
+    yum:
+      name: bzip2
+      state: present
+
+  - name: Install screen
+    yum:
+      name: screen
+      state: present
+
+  - name: Install rsync
+    yum:
+      name: rsync
+      state: present
+
+  - name: Install ksh
+    yum:
+      name: ksh
+      state: present
+
+  - name: Install talk
+    yum:
+      name: talk
+      state: present
+
+  - name: Install talk-server
+    yum:
+      name: talk-server
+      state: present
+
+  - name: Install yum-cron
+    yum:
+      name: yum-cron
+      state: present
+
+  - name: Install net-tools
+    yum:
+      name: net-tools
+      state: present
+
+  - name: Install mlocate
+    yum:
+      name: mlocate
+      state: present
+
+  - name: Install yum-plugin-changelog
+    yum:
+      name: yum-plugin-changelog
+      state: present
+
+  - name: Install yum-plugin-ps
+    yum:
+      name: yum-plugin-ps
+      state: present
+
+  - name: Install build tools
+    yum:
+      name: "@Development tools"
+      state: present
+
+# Check if a reboot is required
+  - name: check if reboot is required
+    shell: needs-restarting -r
+    failed_when: false
+    register: reboot_required
+    changed_when: false
+# Reboot and wait for server to return
+  - name: Reboot the server and wait for it to come back up.
+    reboot:
+    when: reboot_required.rc != 0
+
+  - debug:
+      msg: "{{ hostvars[inventory_hostname].ansible_distribution }} {{ hostvars[inventory_hostname].ansible_distribution_version }}"
+...
