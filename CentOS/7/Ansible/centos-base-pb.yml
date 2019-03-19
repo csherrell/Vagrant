@@ -111,16 +111,6 @@
       name: yum-cron
       state: present
 
-  - name: Install net-tools
-    yum:
-      name: net-tools
-      state: present
-
-  - name: Install mlocate
-    yum:
-      name: mlocate
-      state: present
-
   - name: Install yum-plugin-changelog
     yum:
       name: yum-plugin-changelog
@@ -131,10 +121,32 @@
       name: yum-plugin-ps
       state: present
 
+  - name: Install net-tools
+    yum:
+      name: net-tools
+      state: present
+
+  - name: Install mlocate
+    yum:
+      name: mlocate
+      state: present
+
   - name: Install build tools
     yum:
       name: "@Development tools"
       state: present
+  
+  - name: Enable SSH Login
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: '^#?PasswordAuthentication yes'
+      line: 'PasswordAuthentication yes'
+
+  - name: Enable SSH Login 
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: '^#?PasswordAuthentication no'
+      line: '#PasswordAuthentication no'
 
 # Check if a reboot is required
   - name: check if reboot is required
